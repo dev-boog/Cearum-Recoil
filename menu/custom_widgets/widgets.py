@@ -38,7 +38,7 @@ class Widgets:
         frame = ctk.CTkFrame(parent, fg_color="transparent")
         frame.pack(fill="x")
 
-        combobox = ctk.CTkComboBox(frame, values=values, border_width=1, border_color="#404040", button_color="#1A1A1A", fg_color="#1A1A1A", command=command)
+        combobox = ctk.CTkComboBox(frame, values=values, border_width=1, border_color="#404040", button_color="#1A1A1A", fg_color="#1A1A1A", text_color="#535353", command=command)
         if default_value is not None:
             combobox.set(default_value)
         combobox.pack(padx=0, pady=3, fill="x", side="left")

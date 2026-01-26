@@ -28,11 +28,11 @@ class RecoilMenu(ctk.CTkFrame):
         self.vector_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.vector_frame.pack(fill="x")
 
-        self.mouse_movements_inpt = ctk.CTkTextbox(self.vector_frame, height=400, width=140, font=("Consolas", 14), border_width=1, border_color="#404040", fg_color="#1A1A1A", text_color="#575757")
+        self.mouse_movements_inpt = ctk.CTkTextbox(self.vector_frame, height=300, width=120, font=("Consolas", 12), border_width=1, border_color="#404040", fg_color="#1A1A1A", text_color="#575757")
         self.mouse_movements_inpt.pack(side="left", pady=(0, 5))
         self.mouse_movements_inpt.bind("<<Modified>>", self.on_modified)
 
-        self.script_list_frame = ctk.CTkFrame(self.vector_frame, width=315, height=400, fg_color="#1A1A1A", border_color="#404040", border_width=1)
+        self.script_list_frame = ctk.CTkFrame(self.vector_frame, width=235, height=300, fg_color="#1A1A1A", border_color="#404040", border_width=1)
         self.script_list_frame.pack(side="right", pady=(0, 5))
         self.script_list_frame.pack_propagate(False)
 
