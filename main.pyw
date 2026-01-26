@@ -16,18 +16,23 @@ def show_message(title: str, message: str):
     
 def cycle_script_listener(app):
     last_cycle_state = False
-
     while True:
-        recoil_menu = app.recoil_menu
-        cycle_key = recoil_menu.cycle_keybind.get()
-
-        if cycle_key != "NONE":
-            pressed = makcu_controller.get_button_state(cycle_key)
-            if pressed and not last_cycle_state:
-                recoil_menu.cycle_script() 
-            last_cycle_state = pressed
-
-        time.sleep(0.05)  
+        try:
+            if not makcu_controller.is_connected():
+                time.sleep(0.5)  # Longer sleep when disconnected
+                continue
+                
+            recoil_menu = app.recoil_menu
+            cycle_key = recoil_menu.cycle_keybind.get()
+            if cycle_key != "NONE":
+                pressed = makcu_controller.get_button_state(cycle_key)
+                if pressed and not last_cycle_state:
+                    recoil_menu.cycle_script() 
+                last_cycle_state = pressed
+            time.sleep(0.1)  # Increased from 0.05 to reduce CPU usage
+        except Exception as e:
+            print(f"Cycle listener error: {e}")
+            time.sleep(0.5)
 
 def main():
     app = MenuApp()

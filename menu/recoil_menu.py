@@ -15,7 +15,7 @@ class RecoilMenu(ctk.CTkFrame):
 
         self.vectors = []
         self.configure(fg_color="#232323")
-
+        
         self.enable_checkbox, _ = Widgets.render_checkbox(self, "Enable", False)
         self.toggle_keybind, _ = Widgets.render_combobox(self, "Toggle Keybind", ["M4", "M5", "MMB", "NONE"], "NONE")
         self.enable_require_right_chk, _ = Widgets.render_checkbox(self, "Require Aim", False)
