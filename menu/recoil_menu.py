@@ -14,7 +14,7 @@ class RecoilMenu(ctk.CTkFrame):
         super().__init__(parent)
 
         self.vectors = []
-        self.configure(fg_color="transparent")
+        self.configure(fg_color="#232323")
 
         self.enable_checkbox, _ = Widgets.render_checkbox(self, "Enable", False)
         self.toggle_keybind, _ = Widgets.render_combobox(self, "Toggle Keybind", ["M4", "M5", "MMB", "NONE"], "NONE")
@@ -25,14 +25,14 @@ class RecoilMenu(ctk.CTkFrame):
         self.control_x_slider, self.control_x_value_label = Widgets.render_slider(self, "X Control", 1.0, 0.0, 1.0, self.update_x_control_label)
         self.control_y_slider, self.control_y_value_label = Widgets.render_slider(self, "Y Control", 1.0, 0.0, 1.0, self.update_y_control_label)
 
-        self.vector_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.vector_frame = ctk.CTkFrame(self, fg_color="#232323")
         self.vector_frame.pack(fill="x")
 
-        self.mouse_movements_inpt = ctk.CTkTextbox(self.vector_frame, height=300, width=120, font=("Consolas", 12), border_width=1, border_color="#404040", fg_color="#1A1A1A", text_color="#575757")
+        self.mouse_movements_inpt = ctk.CTkTextbox(self.vector_frame, height=400, width=140, border_width=1, border_color="#404040", fg_color="#1A1A1A", text_color="#FFFFFF")
         self.mouse_movements_inpt.pack(side="left", pady=(0, 5))
         self.mouse_movements_inpt.bind("<<Modified>>", self.on_modified)
 
-        self.script_list_frame = ctk.CTkFrame(self.vector_frame, width=235, height=300, fg_color="#1A1A1A", border_color="#404040", border_width=1)
+        self.script_list_frame = ctk.CTkFrame(self.vector_frame, width=315, height=400, fg_color="#1A1A1A", border_color="#404040", border_width=1)
         self.script_list_frame.pack(side="right", pady=(0, 5))
         self.script_list_frame.pack_propagate(False)
 
@@ -45,10 +45,10 @@ class RecoilMenu(ctk.CTkFrame):
         name_frame.pack(fill="x", pady=(0, 5))
 
         ctk.CTkLabel(name_frame, text="Loaded Script", text_color="#FFFFFF").pack(side="left", padx=10)
-        self.script_name_label = ctk.CTkLabel(name_frame, text="No Script Loaded", text_color="#6B6B6B")
+        self.script_name_label = ctk.CTkLabel(name_frame, text="No Script Loaded", text_color="#FFFFFF")
         self.script_name_label.pack(side="right", padx=10, pady=2)
 
-        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
+        btn_frame = ctk.CTkFrame(self, fg_color="#232323")
         btn_frame.pack(fill="x")
 
         self.cycle_keybind, _ = Widgets.render_combobox(btn_frame, "Cycle Keybind", ["M4", "M5", "MMB", "NONE"], "NONE")
@@ -65,7 +65,7 @@ class RecoilMenu(ctk.CTkFrame):
         scripts = sorted(f[:-4] for f in os.listdir(self.SCRIPTS_DIR) if f.endswith(".txt"))
 
         if not scripts:
-            ctk.CTkLabel(self.scrollable_container, text="No scripts saved", text_color="#555555").pack(pady=20)
+            ctk.CTkLabel(self.scrollable_container, text="No scripts saved", text_color="#FFFFFF").pack(pady=20)
             return
 
         for script in scripts:
@@ -81,9 +81,9 @@ class RecoilMenu(ctk.CTkFrame):
             frame = ctk.CTkFrame(self.scrollable_container, fg_color=frame_color, border_color=border_color, border_width=1)
             frame.pack(fill="x", padx=5, pady=(5, 0))
 
-            ctk.CTkLabel(frame, text=script).pack(side="left", padx=5)
+            ctk.CTkLabel(frame, text=script, text_color="#FFFFFF").pack(side="left", padx=5)
             ctk.CTkButton(frame, text="X", width=5, fg_color="transparent", text_color="#FF5555", hover=False, command=lambda s=script: self.delete_vector_from_name(s)).pack(side="right", padx=(0, 5), pady=1)
-            ctk.CTkButton(frame, text=text, width=40, fg_color="transparent", text_color="#575757", hover=False, command=lambda s=script: self.load_vector_from_name(s)).pack(side="right", padx=(5,0), pady=1)
+            ctk.CTkButton(frame, text=text, width=40, fg_color="transparent", text_color="#FFFFFF", hover=False, command=lambda s=script: self.load_vector_from_name(s)).pack(side="right", padx=(5,0), pady=1)
     
     def cycle_script(self):
         scripts = sorted(f[:-4] for f in os.listdir(self.SCRIPTS_DIR) if f.endswith(".txt"))

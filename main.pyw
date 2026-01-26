@@ -1,73 +1,59 @@
-from menu.menu import MenuApp
+from menu.menu import MenuApp  
 from mouse.makcu import makcu_controller
 from features.recoil.recoil import recoil
 
 import tkinter as tk
 from tkinter import messagebox
-import threading
+
 import time
+import threading
 
-def main():
-    # -------- CREATE CTK ROOT --------
-    app = MenuApp()
+def show_message(title: str, message: str):
+    root = tk.Tk()
+    root.withdraw()  
+    root.attributes('-topmost', True)
+    messagebox.showinfo(title, message)
+    
+def cycle_script_listener(app):
+    last_cycle_state = False
 
-    def show_message(title: str, message: str):
-        app.after(
-            0,
-            lambda: messagebox.showinfo(title, message, parent=app)
-        )
-
-    # -------- MAKCU CONNECT --------
-    if makcu_controller.connect() is None:
-        show_message(
-            "Cearum",
-            "There was an error connecting to your Makcu.\n"
-            "Make sure it is connected and try again."
-        )
-        return
-
-    show_message("Cearum", "Makcu has been found.")
-    makcu_controller.StartButtonListener()
-
-    # -------- RECOIL THREAD (UNCHANGED) --------
-    recoil_thread = threading.Thread(
-        target=recoil.run_recoil,
-        args=(app.recoil_menu,),
-        daemon=True
-    )
-    recoil_thread.start()
-
-    # -------- GUI-SAFE CYCLE POLLING --------
-    app._last_cycle_state = False
-
-    def cycle_script_poll():
-        if not app.is_running:
-            return
-
+    while True:
         recoil_menu = app.recoil_menu
         cycle_key = recoil_menu.cycle_keybind.get()
 
         if cycle_key != "NONE":
             pressed = makcu_controller.get_button_state(cycle_key)
+            if pressed and not last_cycle_state:
+                recoil_menu.cycle_script() 
+            last_cycle_state = pressed
 
-            if pressed and not app._last_cycle_state:
-                recoil_menu.cycle_script()
+        time.sleep(0.05)  
 
-            app._last_cycle_state = pressed
+def main():
+    app = MenuApp()
+    
+    if makcu_controller.connect() is None:
+        show_message("Cearum", "Their was an error connecting to your Makcu. Please make sure its connected and try again.")
+        time.sleep(3)
+        return
+    
+    show_message("Cearum", "Makcu has been found.")
+    makcu_controller.StartButtonListener() 
 
-        app.after(50, cycle_script_poll)
+    recoil_thread = threading.Thread(target=recoil.run_recoil, args=(app.recoil_menu,), daemon=True)
+    recoil_thread.start()
+    
+    cycle_thread = threading.Thread(target=cycle_script_listener, args=(app,), daemon=True)
+    cycle_thread.start()
 
-    app.after(50, cycle_script_poll)
-
-    # -------- CLEAN SHUTDOWN --------
     def on_closing():
-        app.is_running = False
-        makcu_controller.disconnect()
-        app.destroy()
+        time.sleep(0.1)
+        app.destroy()        
+        import os
+        os._exit(0)         
 
     app.protocol("WM_DELETE_WINDOW", on_closing)
     app.mainloop()
-
 
 if __name__ == "__main__":
     main()
