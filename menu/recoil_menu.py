@@ -6,6 +6,7 @@ from menu.custom_widgets.widgets import Widgets
 from mouse.makcu import makcu_controller
 
 
+
 class RecoilMenu(ctk.CTkFrame):
     SCRIPTS_DIR = "./saved_scripts"
     LOADED_SCRIPT_NAME = "NONE"
@@ -70,7 +71,7 @@ class RecoilMenu(ctk.CTkFrame):
 
         for script in scripts:
             if script == self.LOADED_SCRIPT_NAME:
-                frame_color = "#1F4D2B"  # green for loaded script
+                frame_color = "#1F4D2B"  
                 border_color = "#3C9D5D"
                 text=""
             else:
@@ -97,6 +98,9 @@ class RecoilMenu(ctk.CTkFrame):
             next_index = 0
 
         self.load_vector_from_name(scripts[next_index])
+        
+    def get_cycle_bind(self):
+        return self.cycle_keybind.get()
     
     def change_directory(self):
         path = filedialog.askdirectory(initialdir=self.SCRIPTS_DIR)
@@ -152,8 +156,7 @@ class RecoilMenu(ctk.CTkFrame):
         self.control_y_value_label.configure(text=f"{float(v):.2f}")
 
     def update_scalar_label(self, v):
-        self.scalar_value_label.configure(text=f"{float(v):.2f}")
-        makcu_controller.set_recoil_scaler(float(v))
+        self.scalar_value_label.configure(text=f"{float(v):.2f}")        
 
     def get_mouse_vectors(self):
         vectors = []
@@ -173,6 +176,8 @@ class RecoilMenu(ctk.CTkFrame):
 
     def get_toggle_keybind(self):
         return self.toggle_keybind.get()
+    def get_recoil_scalar(self):
+        return self.scalar_slider.get()
     def get_x_control(self):
         return self.control_x_slider.get()
     def get_y_control(self):
