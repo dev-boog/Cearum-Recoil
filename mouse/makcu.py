@@ -15,7 +15,7 @@ class makcu_controller:
     }
 
     connection_lock = threading.Lock()
-    is_connected_flag = False  # FIX: renamed
+    is_connected_flag = False 
 
 
     @staticmethod

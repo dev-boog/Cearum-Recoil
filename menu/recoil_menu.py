@@ -21,7 +21,9 @@ class RecoilMenu(ctk.CTkFrame):
         self.toggle_keybind, _ = Widgets.render_combobox(self, "Toggle Keybind", ["M4", "M5", "MMB", "NONE"], "NONE")
         self.enable_require_right_chk, _ = Widgets.render_checkbox(self, "Require Aim", False)
         self.loop_recoil_chk, _ = Widgets.render_checkbox(self, "Loop Recoil", False)
+        self.enable_randomisation, _ = Widgets.render_checkbox(self, "Randomisation", False)
 
+        self.randomisation_strength_slider, self.randomisation_strength_slider_value_label = Widgets.render_slider(self, "Randomisation Strength", 0.5, 0, 3, self.update_randomisation_label)
         self.scalar_slider, self.scalar_value_label = Widgets.render_slider(self, "Recoil Scalar", 1.0, 0.0, 3.0, self.update_scalar_label)
         self.control_x_slider, self.control_x_value_label = Widgets.render_slider(self, "X Control", 1.0, 0.0, 1.0, self.update_x_control_label)
         self.control_y_slider, self.control_y_value_label = Widgets.render_slider(self, "Y Control", 1.0, 0.0, 1.0, self.update_y_control_label)
@@ -157,6 +159,9 @@ class RecoilMenu(ctk.CTkFrame):
 
     def update_scalar_label(self, v):
         self.scalar_value_label.configure(text=f"{float(v):.2f}")        
+        
+    def update_randomisation_label(self, v):
+        self.randomisation_strength_slider_value_label.configure(text=f"{float(v):.2f}")
 
     def get_mouse_vectors(self):
         vectors = []
@@ -170,10 +175,12 @@ class RecoilMenu(ctk.CTkFrame):
 
     def get_is_enabled(self):
         return self.enable_checkbox.get()
-
+    def get_is_randomisation_enabled(self):
+        return self.enable_randomisation.get()
+    def get_randomisation_strength(self):
+        return self.randomisation_strength_slider.get()
     def get_is_recoil_looped(self):
-        return self.loop_recoil_chk.get()
-
+     return self.loop_recoil_chk.get()
     def get_toggle_keybind(self):
         return self.toggle_keybind.get()
     def get_recoil_scalar(self):
@@ -182,6 +189,5 @@ class RecoilMenu(ctk.CTkFrame):
         return self.control_x_slider.get()
     def get_y_control(self):
         return self.control_y_slider.get()
-
     def requires_right_button(self):
         return self.enable_require_right_chk.get()

@@ -16,20 +16,17 @@ class MenuApp(ctk.CTk):
         self.is_running = True
         
         super().__init__()
-        self.geometry("400x740")
+        self.geometry("400x790")
         ctk.set_default_color_theme("dark-blue")
         ctk.set_widget_scaling(0.8)
         
         if getattr(sys, 'frozen', False):
-            # Running as a PyInstaller bundle
-            BASE_DIR = sys._MEIPASS  # temporary folder PyInstaller extracts to
-            EXE_DIR = os.path.dirname(sys.executable)  # directory where the EXE is
+            BASE_DIR = sys._MEIPASS  
+            EXE_DIR = os.path.dirname(sys.executable) 
         else:
-            # Running as a normal script
             BASE_DIR = os.path.dirname(os.path.abspath(__file__))
             EXE_DIR = BASE_DIR
 
-        # Path relative to the EXE
         logo_path = os.path.join(EXE_DIR, "assets", "logo.png")
         
         self.title("")

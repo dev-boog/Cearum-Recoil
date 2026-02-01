@@ -1,9 +1,16 @@
 from menu.menu import MenuApp as menu
 from mouse.makcu import makcu_controller
 from menu.recoil_menu import RecoilMenu
+
 import time
+import random
 
 class recoil:    
+    
+    @staticmethod
+    def jitter(value, max_offset):
+        return value + random.uniform(-max_offset, max_offset)
+    
     @staticmethod
     def run_recoil(app: RecoilMenu):
         shot_count = 0
@@ -13,7 +20,6 @@ class recoil:
         last_cycle_state = False
         
         while True:
-            # =[Keybinds]===
             toggle_key = RecoilMenu.get_toggle_keybind(app) 
             if toggle_key != "NONE":
                 toggle_key_pressed = makcu_controller.get_button_state(toggle_key)
@@ -62,7 +68,11 @@ class recoil:
                         time.sleep(0.02)
                         continue
 
-                x, y, delay = recoil_pattern[shot_count]
+                x, y, delay = recoil_pattern[shot_count] 
+                if RecoilMenu.get_is_randomisation_enabled(app) == True:
+                    x = recoil.jitter(x, RecoilMenu.get_randomisation_strength(app))
+                    y = recoil.jitter(y, RecoilMenu.get_randomisation_strength(app))
+
                 start_time = time.perf_counter()
                 makcu_controller.move_mouse_smoothly(
                     x * RecoilMenu.get_x_control(app) * RecoilMenu.get_recoil_scalar(app),
