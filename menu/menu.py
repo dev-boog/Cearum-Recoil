@@ -27,7 +27,7 @@ class MenuApp(ctk.CTk):
             BASE_DIR = os.path.dirname(os.path.abspath(__file__))
             EXE_DIR = BASE_DIR
 
-        logo_path = os.path.join(EXE_DIR, "assets", "logo.png")
+        logo_path = os.path.join(BASE_DIR, "assets", "logo.png")
         
         self.title("")
         self.resizable(False, False)

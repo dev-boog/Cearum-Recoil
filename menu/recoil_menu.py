@@ -4,6 +4,7 @@ from tkinter import filedialog
 
 from menu.custom_widgets.widgets import Widgets
 from mouse.makcu import makcu_controller
+from .config_manager import ConfigManager
 
 
 
@@ -16,18 +17,23 @@ class RecoilMenu(ctk.CTkFrame):
 
         self.vectors = []
         self.configure(fg_color="#232323")
-        
-        self.enable_checkbox, _ = Widgets.render_checkbox(self, "Enable", False)
-        self.toggle_keybind, _ = Widgets.render_combobox(self, "Toggle Keybind", ["M4", "M5", "MMB", "NONE"], "NONE")
-        self.enable_require_right_chk, _ = Widgets.render_checkbox(self, "Require Aim", False)
-        self.loop_recoil_chk, _ = Widgets.render_checkbox(self, "Loop Recoil", False)
-        self.enable_randomisation, _ = Widgets.render_checkbox(self, "Randomisation", False)
-        self.enable_return_crosshair, _ = Widgets.render_checkbox(self, "Return Crosshair", False)
 
-        self.randomisation_strength_slider, self.randomisation_strength_slider_value_label = Widgets.render_slider(self, "Randomisation Strength", 0.5, 0, 3, self.update_randomisation_label)
-        self.scalar_slider, self.scalar_value_label = Widgets.render_slider(self, "Recoil Scalar", 1.0, 0.0, 3.0, self.update_scalar_label)
-        self.control_x_slider, self.control_x_value_label = Widgets.render_slider(self, "X Control", 1.0, 0.0, 1.0, self.update_x_control_label)
-        self.control_y_slider, self.control_y_value_label = Widgets.render_slider(self, "Y Control", 1.0, 0.0, 1.0, self.update_y_control_label)
+        # Load config
+        config = ConfigManager.load_config()
+        self.SCRIPTS_DIR = config.get("scripts_dir", "./saved_scripts")
+        self.LOADED_SCRIPT_NAME = config.get("loaded_script", "NONE")
+        
+        self.enable_checkbox, _ = Widgets.render_checkbox(self, "Enable", config.get("enable", False))
+        self.toggle_keybind, _ = Widgets.render_combobox(self, "Toggle Keybind", ["M4", "M5", "MMB", "NONE"], config.get("toggle_keybind", "NONE"))
+        self.enable_require_right_chk, _ = Widgets.render_checkbox(self, "Require Aim", config.get("require_aim", False))
+        self.loop_recoil_chk, _ = Widgets.render_checkbox(self, "Loop Recoil", config.get("loop_recoil", False))
+        self.enable_randomisation, _ = Widgets.render_checkbox(self, "Randomisation", config.get("randomisation", False))
+        self.enable_return_crosshair, _ = Widgets.render_checkbox(self, "Return Crosshair", config.get("return_crosshair", False))
+
+        self.randomisation_strength_slider, self.randomisation_strength_slider_value_label = Widgets.render_slider(self, "Randomisation Strength", config.get("randomisation_strength", 0.5), 0, 3, self.update_randomisation_label)
+        self.scalar_slider, self.scalar_value_label = Widgets.render_slider(self, "Recoil Scalar", config.get("recoil_scalar", 1.0), 0.0, 3.0, self.update_scalar_label)
+        self.control_x_slider, self.control_x_value_label = Widgets.render_slider(self, "X Control", config.get("x_control", 1.0), 0.0, 1.0, self.update_x_control_label)
+        self.control_y_slider, self.control_y_value_label = Widgets.render_slider(self, "Y Control", config.get("y_control", 1.0), 0.0, 1.0, self.update_y_control_label)
 
         self.vector_frame = ctk.CTkFrame(self, fg_color="#232323")
         self.vector_frame.pack(fill="x")
@@ -52,10 +58,13 @@ class RecoilMenu(ctk.CTkFrame):
         self.script_name_label = ctk.CTkLabel(name_frame, text="No Script Loaded", text_color="#FFFFFF")
         self.script_name_label.pack(side="right", padx=10, pady=2)
 
+        if self.LOADED_SCRIPT_NAME != "NONE":
+             self.load_vector_from_name(self.LOADED_SCRIPT_NAME)
+
         btn_frame = ctk.CTkFrame(self, fg_color="#232323")
         btn_frame.pack(fill="x")
 
-        self.cycle_keybind, _ = Widgets.render_combobox(btn_frame, "Cycle Keybind", ["M4", "M5", "MMB", "NONE"], "NONE")
+        self.cycle_keybind, _ = Widgets.render_combobox(btn_frame, "Cycle Keybind", ["M4", "M5", "MMB", "NONE"], config.get("cycle_keybind", "NONE"))
         
         ctk.CTkButton(btn_frame, text="Save Vector", command=self.save_vector, text_color="#FFFFFF").pack(side="left", padx=5, pady=5)
         ctk.CTkButton(btn_frame, text="Change Directory", command=self.change_directory, text_color="#FFFFFF").pack(side="right", padx=5, pady=5)
@@ -194,3 +203,20 @@ class RecoilMenu(ctk.CTkFrame):
         return self.control_y_slider.get()
     def requires_right_button(self):
         return self.enable_require_right_chk.get()
+
+    def get_current_settings(self):
+        return {
+            "enable": self.get_is_enabled(),
+            "toggle_keybind": self.get_toggle_keybind(),
+            "require_aim": self.requires_right_button(),
+            "loop_recoil": self.get_is_recoil_looped(),
+            "randomisation": self.get_is_randomisation_enabled(),
+            "return_crosshair": self.get_return_crosshair_enabled(),
+            "randomisation_strength": self.get_randomisation_strength(),
+            "recoil_scalar": self.get_recoil_scalar(),
+            "x_control": self.get_x_control(),
+            "y_control": self.get_y_control(),
+            "scripts_dir": self.SCRIPTS_DIR,
+            "loaded_script": self.LOADED_SCRIPT_NAME,
+            "cycle_keybind": self.cycle_keybind.get()
+        }
