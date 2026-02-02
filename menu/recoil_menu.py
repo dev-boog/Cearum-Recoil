@@ -22,6 +22,7 @@ class RecoilMenu(ctk.CTkFrame):
         self.enable_require_right_chk, _ = Widgets.render_checkbox(self, "Require Aim", False)
         self.loop_recoil_chk, _ = Widgets.render_checkbox(self, "Loop Recoil", False)
         self.enable_randomisation, _ = Widgets.render_checkbox(self, "Randomisation", False)
+        self.enable_return_crosshair, _ = Widgets.render_checkbox(self, "Return Crosshair", False)
 
         self.randomisation_strength_slider, self.randomisation_strength_slider_value_label = Widgets.render_slider(self, "Randomisation Strength", 0.5, 0, 3, self.update_randomisation_label)
         self.scalar_slider, self.scalar_value_label = Widgets.render_slider(self, "Recoil Scalar", 1.0, 0.0, 3.0, self.update_scalar_label)
@@ -180,7 +181,9 @@ class RecoilMenu(ctk.CTkFrame):
     def get_randomisation_strength(self):
         return self.randomisation_strength_slider.get()
     def get_is_recoil_looped(self):
-     return self.loop_recoil_chk.get()
+        return self.loop_recoil_chk.get()
+    def get_return_crosshair_enabled(self):
+        return self.enable_return_crosshair.get()
     def get_toggle_keybind(self):
         return self.toggle_keybind.get()
     def get_recoil_scalar(self):
