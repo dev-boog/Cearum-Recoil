@@ -1,5 +1,6 @@
 from menu.menu import MenuApp  
 from menu.recoil_menu import RecoilMenu
+from menu.config_manager import ConfigManager
 from mouse.makcu import makcu_controller
 from features.recoil.recoil import recoil
 
@@ -32,6 +33,14 @@ def main():
 
     def on_closing():
         time.sleep(0.1)
+        
+        # Save config
+        try:
+            settings = app.recoil_menu.get_current_settings()
+            ConfigManager.save_config(settings)
+        except Exception as e:
+            print(f"Error saving config: {e}")
+            
         app.destroy()        
         os._exit(0)         
 
