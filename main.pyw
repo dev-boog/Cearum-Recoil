@@ -27,7 +27,7 @@ def main():
     show_message("Cearum", "Makcu has been found.")
     makcu_controller.StartButtonListener() 
 
-    recoil_thread = threading.Thread(target=recoil.run_recoil, args=(app.recoil_menu,), daemon=True)
+    recoil_thread = threading.Thread(target=recoil.run_recoil, args=(app.recoil_menu, app.settings_menu), daemon=True)
     recoil_thread.start()
 
     def on_closing():

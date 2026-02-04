@@ -20,7 +20,6 @@ class makcu_controller:
 
     @staticmethod
     def is_connected():
-        """Check if controller is connected"""
         with makcu_controller.connection_lock:
             return (
                 makcu_controller.is_connected_flag
@@ -63,12 +62,9 @@ class makcu_controller:
 
             return makcu_controller.controller
 
-
     @staticmethod
     def StartButtonListener():
-        """Compatibility wrapper"""
         makcu_controller.connect()
-
 
     @staticmethod
     def click_button(button_name: str):
