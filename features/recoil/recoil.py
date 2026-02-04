@@ -47,7 +47,7 @@ class recoil:
             
             if not lmb_pressed and lmb_was_pressed and total_y_movement != 0:
                 if RecoilMenu.get_return_crosshair_enabled(app) == True:
-                    makcu_controller.move_mouse_smoothly(0, -total_y_movement)
+                    makcu_controller.move_mouse_smoothly(0, -total_y_movement, 20, RecoilMenu.get_return_speed(app))
                 total_y_movement = 0
                 shot_count = 0
                 lmb_was_pressed = False
@@ -66,7 +66,6 @@ class recoil:
                 total_y_movement = 0
                 lmb_was_pressed = True
             
-            # Recoil logic
             if recoil_pattern:
                 if app.requires_right_button() and not makcu_controller.get_button_state("RMB"):
                     time.sleep(0.02)
@@ -85,14 +84,12 @@ class recoil:
                     x = recoil.jitter(x, RecoilMenu.get_randomisation_strength(app))
                     y = recoil.jitter(y, RecoilMenu.get_randomisation_strength(app))
                 
-                # Calculate actual movement values
                 actual_x = x * RecoilMenu.get_x_control(app) * RecoilMenu.get_recoil_scalar(app)
                 actual_y = y * RecoilMenu.get_y_control(app) * RecoilMenu.get_recoil_scalar(app)
                 
                 start_time = time.perf_counter()
                 makcu_controller.move_mouse_smoothly(actual_x, actual_y)
                 
-                # Track total Y movement for reset
                 total_y_movement += actual_y
                 
                 elapsed = time.perf_counter() - start_time

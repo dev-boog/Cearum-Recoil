@@ -16,7 +16,7 @@ class MenuApp(ctk.CTk):
         self.is_running = True
         
         super().__init__()
-        self.geometry("400x820")
+        self.geometry("400x840")
         ctk.set_default_color_theme("dark-blue")
         ctk.set_widget_scaling(0.8)
         

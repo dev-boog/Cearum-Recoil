@@ -125,8 +125,6 @@ class makcu_controller:
         try:
             accumulated_x = 0.0
             accumulated_y = 0.0
-            remainder_x = 0.0
-            remainder_y = 0.0
 
             for i in range(steps):
                 t = (i + 1) / steps
@@ -138,14 +136,11 @@ class makcu_controller:
                 delta_x = target_x - accumulated_x
                 delta_y = target_y - accumulated_y
 
-                accumulated_x += delta_x
-                accumulated_y += delta_y
+                move_x = round(delta_x)
+                move_y = round(delta_y)
 
-                move_x = int(accumulated_x + remainder_x)
-                move_y = int(accumulated_y + remainder_y)
-
-                remainder_x += accumulated_x - move_x
-                remainder_y += accumulated_y - move_y
+                accumulated_x += move_x
+                accumulated_y += move_y
 
                 if move_x or move_y:
                     mck.move(move_x, move_y)

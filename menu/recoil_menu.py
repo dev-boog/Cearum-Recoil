@@ -28,6 +28,7 @@ class RecoilMenu(ctk.CTkFrame):
         self.scalar_slider, self.scalar_value_label = Widgets.render_slider(self, "Recoil Scalar", 1.0, 0.0, 3.0, self.update_scalar_label)
         self.control_x_slider, self.control_x_value_label = Widgets.render_slider(self, "X Control", 1.0, 0.0, 1.0, self.update_x_control_label)
         self.control_y_slider, self.control_y_value_label = Widgets.render_slider(self, "Y Control", 1.0, 0.0, 1.0, self.update_y_control_label)
+        self.return_speed_slider, self.return_speed_value_label = Widgets.render_slider(self, "Return Strength", 0.5, 0.00, 2.00, self.update_return_crosshair_label)
 
         self.vector_frame = ctk.CTkFrame(self, fg_color="#232323")
         self.vector_frame.pack(fill="x")
@@ -163,6 +164,9 @@ class RecoilMenu(ctk.CTkFrame):
         
     def update_randomisation_label(self, v):
         self.randomisation_strength_slider_value_label.configure(text=f"{float(v):.2f}")
+        
+    def update_return_crosshair_label(self, v):
+        self.return_speed_value_label.configure(text=f"{float(v):.2f}")
 
     def get_mouse_vectors(self):
         vectors = []
@@ -194,3 +198,5 @@ class RecoilMenu(ctk.CTkFrame):
         return self.control_y_slider.get()
     def requires_right_button(self):
         return self.enable_require_right_chk.get()
+    def get_return_speed(self):
+        return self.return_speed_slider.get()
