@@ -6,7 +6,7 @@ import time
 import random
 
 class recoil:     
-    CS2_BASE_SENSITIVITY = 1.6      
+    CS2_BASE_SENSITIVITY = 1.25 
     
     @staticmethod
     def jitter(value, max_offset):
